@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Addimage extends React.Component {
+            constructor(){
+                super();
+                this.state = {
+                    tag: "tiger",
+                }
+            }
+            ChangeTag = (game) => {
+                this.setState({
+                    tag: game,
+                })
+            }
+            render() {
+                return (
+                    <div className="container text-center">
+                        <h1 className="m-3 text-Warning">Image change App</h1>
+                        <div>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("basketball")}>Basketball</button>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("pubg")}>PubG</button>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("tiger")}>Tiger</button>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("phone")}>Phone</button>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("laptop")}>Laptop</button>
+                            <button className="btn btn-primary m-2" onClick={() => this.ChangeTag("cricket")}>Cricket</button>
+                        </div>
+                        <div>
+                            <img src={"../assets/" + this.state.tag + ".jpg"} alt="" />
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Addimage />, document.getElementById('root'));
+    </script>
+</body>
+</html>
