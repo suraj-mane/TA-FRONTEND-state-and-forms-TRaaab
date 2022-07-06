@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Counter extends React.Component {
+            constructor(){
+                super();
+                this.state = {
+                    counter: 0,
+                }
+            }
+            IncrementCounter = () => {
+                this.setState({
+                    counter: this.state.counter + 1,
+                })
+            }
+            DecrementCounter = () => {
+                this.setState({
+                    counter: this.state.counter - 1,
+                })
+            }
+            ResetCounter = () => {
+                this.setState({
+                    counter: 0,
+                })
+            }
+            IncrementByNumber = (num) => {
+                if(num == 5){
+                    this.setState({
+                            counter: this.state.counter + 5,
+                    })
+                }
+                if(num == 10){
+                    this.setState({
+                            counter: this.state.counter + 10, 
+                    })
+                }
+                if(num == 15){
+                    this.setState({
+                            counter: this.state.counter + 15, 
+                    })
+                }
+            }
+            FinalValue = (max) => {
+                if(max == 15){
+                    this.setState({
+                            counter: 15,
+                    }) 
+                }
+                if(max == 100){
+                    this.setState({
+                            counter: 100,
+                    })
+                }
+                if(max == 200){
+                    this.setState({
+                            counter: 200,
+                    })
+                }
+            }
+            render() {
+                return(
+                    <div className="bg-primary">
+                        <div className=" container text-light text-center py-5">
+                            <h1 className="pt-5">{this.state.counter}</h1>
+                            <div className="d-flex justify-content-center">
+                                <div>
+                                    <p className="fs-5 fw-bold">Steps</p>
+                                    <button className="btn btn-success m-3 fw-bold" onClick={() => this.IncrementByNumber(5)}>5</button>
+                                    <button className="btn btn-success m-3 fw-bold" onClick={() => this.IncrementByNumber(10)}>10</button>
+                                    <button className="btn btn-success m-3 fw-bold" onClick={() => this.IncrementByNumber(15)}>15</button>
+                                </div>
+                                <div>
+                                    <p className="fs-5 fw-bold">Max</p>
+                                    <button className="btn btn-warning m-3 fw-bold" onClick={() => this.FinalValue(15)}>15</button>
+                                    <button className="btn btn-warning m-3 fw-bold" onClick={() => this.FinalValue(100)}>100</button>
+                                    <button className="btn btn-warning m-3 fw-bold" onClick={() => this.FinalValue(200)}>200</button>
+                                </div>
+                            </div>
+                            <div>
+                                <button className="btn btn-light m-3 fw-bold" onClick={this.IncrementCounter} >Increment</button>
+                                <button className="btn btn-light m-3 fw-bold" onClick={this.DecrementCounter}>Decrement</button>
+                                <button className="btn btn-light m-3 fw-bold" onClick={this.ResetCounter}>Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Counter />, document.getElementById("root"));
+    </script>
+</body>
+</html>
