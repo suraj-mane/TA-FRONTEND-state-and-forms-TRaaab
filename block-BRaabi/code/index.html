@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        let data = [
+    {
+      Q: 'Who is it for?',
+      A:
+        'Recent college graduates, students taking gap year, dropouts, professionals looking to switch careers, anyone learning web development but needs right environment and guidance. No prior programming knowledge required.',
+    },
+    {
+      Q: 'Does AltCampus help me get a job?',
+      A:
+        'Yes. All we can. We help you at every stage, help you build strong portfolio, prepare for interviews, put you in touch with companies for interview.',
+    },
+    {
+      Q: 'How does the entire process work?',
+      A: 'You can read about it here - How it works.',
+    },
+    {
+      Q: 'Is this course self-paced or batched?',
+      A:
+        'This program follows a blended approach. Students can move at their own pace, however they will be matched with peers learning same concepts.',
+    },
+  ];
+
+class Card extends React.Component {
+    constructor(props){
+        super();
+        this.state = {
+            activeQ: "",
+        }
+    }
+    handelClick = (ele) => {
+        this.setState({
+            activeQ:ele,
+        })
+    }
+    render(){
+        return (
+            <div className="container text-center">
+                <div className="mt-5">
+                {
+                    <ul className="">{
+                        data.map(ele => <>
+                            <li key={ele.Q} className={ele.Q === this.state.activeQ ? "bg-primary text-light p-3 fs-5 m-1 " :"bg-dark text-light p-3 fs-5 m-2 "} onClick={() => this.handelClick(ele.Q)}>{ele.Q}</li>
+                            <li key={ele.A} className={ele.Q === this.state.activeQ ? " bg-primary text-light p-3 fs-5 d-block":"d-none"}>{ele.A}</li>
+                            </>
+                        )}
+                    </ul>
+                }
+                </div>
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(<Card />, document.getElementById("root"));
+    </script>
+</body>
+</html>
