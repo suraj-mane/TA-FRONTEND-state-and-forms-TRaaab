@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steps-forms</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class MainForm extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    currentStep: 1,
+                    fname:"",
+                    lname:"",
+                    date:"",
+                    email:"",
+                    address:"",
+                    message:"",
+                    gender:""
+                }
+            }
+            handelStepNext = () => {
+                this.setState({
+                    currentStep: this.state.currentStep + 1
+                })
+            }
+            handelStepprev = () => {
+                this.setState({
+                    currentStep: this.state.currentStep - 1
+                })
+            }
+            handelchange = (event) => {
+                const {name, value} = event.target
+                this.setState({
+                    [name]: value
+                })
+            }
+            handelsbmit = (event) => {
+                event.preventDefault();
+            }
+            getInfo = (event) => {
+                event.preventDefault();
+                const {fname, lname, date, email,address,message} = this.state
+                alert(`Your all data: \n
+                        Email: ${email} \n
+                        First_name: ${fname} \n
+                        Last_name: ${lname} \n
+                        Date_of_Birth: ${date}`)
+            }
+            getComponent = () => {
+                switch(this.state.currentStep){
+                    case 1:
+                        return <Step1 next={this.handelStepNext}
+                                    data={this.handelchange}
+                                    info ={this.handelinfo}/>;
+                    case 2:
+                        return <Step2 next={this.handelStepNext}
+                                back={this.handelStepprev}
+                                data={this.handelchange}/>;
+                    case 3:
+                        return <Step3 back={this.handelStepprev}
+                                    data={this.handelchange}
+                                    submit={this.getInfo}/>
+                }
+            }
+            render(){
+                return(
+                    <div className="container">
+                        <div className="d-flex m-5 w-100 shadow-lg  mb-5 bg-body rounded">
+                            <img className="w-50 rounded-start " src="pexels.jpg" alt="" />
+                            <div className="mx-5 my-3 w-50">
+                                <div>
+                                    <button className={this.state.currentStep === 1 ? "btn btn-secondary m-2":"btn btn-primary m-2"}>1</button><sub className="btn-name">Sign Up</sub>
+                                    <button className={this.state.currentStep === 2 ? "btn btn-secondary m-2":"btn btn-primary m-2"}>2</button><sub className="btn-name">Message</sub>
+                                    <button className={this.state.currentStep === 3 ? "btn btn-secondary m-2":"btn btn-primary m-2"}>3</button><sub className="btn-name">Checkbox</sub>
+                                <hr />
+                                <sub className="">Step {this.state.currentStep}/3</sub>
+                                </div>
+                                <form action="" onClick={() => this.handelsbmit(event)}>
+                                    {this.getComponent()}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+        
+        function Step1(props){
+            return(
+                <div>
+                    <h6 className="mt-2 text-primary fw-bold fs-5">Sign Up</h6>
+                    <div className="d-flex flex-wrap w-100">
+                        <div className="mx-3 my-3">
+                            <label htmlFor="first-Name">First-Name</label>
+                            <input type="text" className="form-control" placeholder="First-Name" id="first-Name" name="fname" onChange={props.data}/>
+                            <label htmlFor="last-Name">Last-Name</label>
+                            <input type="text" className="form-control" placeholder="Last-Name" id="last-Name" name="lname" onChange={props.data}/>
+                        </div>
+                        <div className="mx-3 my-3">
+                            <label htmlFor="date">Date of Birth</label>
+                            <input type="date" className="form-control" placeholder="Date-of-Birth" id="date" name="date" onChange={props.data}/>
+                            <label htmlFor="email">Email-Address</label>
+                            <input type="text" className="form-control" placeholder="Email-Address" id="email" name="email" onChange={props.data}/>
+                        </div>
+                        <label htmlFor="address" className="mx-3">Address</label>
+                        <input type="text" className="form-control mx-3" placeholder="Address" id="address" name="address" onChange={props.data}/>
+                    </div>
+                    <hr />
+                    <button className="btn btn-primary mt-3" onClick={props.next}>Next</button>
+                </div>
+            )
+        }
+
+        function Step2(props){
+            return(
+                <div>
+                    <h6 className="mt-2 text-primary fw-bold fs-5">Message</h6>
+                    <div>
+                        <label htmlFor="message" className="">Message</label>
+                        <textarea type="text" className="form-control" id="exampleFormControlTextarea1" placeholder="Type something..." rows="3" onChange={props.data}></textarea>
+                        <div className="d-flex mt-3">
+                            <input className="mx-2"  type="radio" value="The number one" onChange={props.data} /><sub>The number one choice</sub>
+                            <input className="mx-2" type="radio" value="The number two" onChange={props.data} /><sub>The number one choice</sub>
+                        </div>
+                        <hr/>
+                        <button className="btn btn-secondary mt-3 me-3" onClick={props.back}>Back</button>
+                        <button className="btn btn-primary mt-3" onClick={props.next}>Next</button>
+                    </div>
+                </div>
+            )
+        }
+
+        function Step3(props){
+            return(
+                <div>
+                    <h6 className="mt-2 text-primary fw-bold fs-5">Check box</h6>
+                    <div>
+                        <input type="checkbox" id="vehicle1" name="option" value="option1" onChange={props.data} />
+                        <label htmlFor="vehicle1">I want to add this option</label><br/>
+                        <input type="checkbox" id="vehicle2" name="option2" value="option2" onChange={props.data} />
+                        <label htmlFor="vehicle2">Let me click this checkbox and choose some coo stuf</label><br/>
+                    </div>
+                    <hr />
+                    <button className="btn btn-secondary mt-3 me-3" onClick={props.back}>Back</button>
+                    <button className="btn btn-primary mt-3" onClick={props.submit}>Submit</button>
+                </div>
+            )
+        }
+    ReactDOM.render(<MainForm />, document.getElementById('root'));
+    </script>
+</body>
+</html>
