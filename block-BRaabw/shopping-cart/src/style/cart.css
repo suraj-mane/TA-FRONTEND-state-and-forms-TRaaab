@@ -1,0 +1,9 @@
+.before {
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+.after {
+    position: relative;
+    left: -500px;
+}
