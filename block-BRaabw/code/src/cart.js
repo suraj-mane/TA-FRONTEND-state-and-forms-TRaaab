@@ -1,65 +1,87 @@
 import React from 'react';
 import "./style/cart.css"
-import data from "./data.json";
+import CartItem from './CartItem';
 
 class Cart extends React.Component {
     constructor(props){
-        super();
+        super(props);
+        this.state ={
+          isopen: false,
+        }
     }
+    isclose = () => {this.setState({isopen: false})};
+    isOpen = () => {this.setState({isopen:true})};
     render(){
-        let { state } = this.props;
-        let final = data.products.filter((pro) => {
-            if(state.cart[pro.id]){
-                return pro
-            }
-        })
-        let subTotal = final.reduce((prev, curr)=> {
-          let singleItemPrice = curr.price * state.cart[curr.id]
-           prev = prev + singleItemPrice;
-           return Math.floor(prev, -1);
-        }, 0);
-        return(
-            <div className={state.cartoc ? "before ":"after"} style={{width:"500px"}}>
-                <div className='w-100 bg-dark text-center py-2'>
-                <img src={`/static/bag-icon.png`} alt="bag"/>
-                <hr className='text-light'/>
-                    {
-                        final.map((ele) => (
-                            <div key={ele.id} className="card m-3 bg-dark text-light" style={{width:"450px",height:"150px"}}>
-                              <div className="row g-0">
-                                <div className="col-md-4">
-                                  <img src={`/static/products/${ele.sku}_2.jpg`} style={{height:"150px"}} className="w-100 rounded-start" alt="..." />
-                                </div>
-                                <div className="col-md-8 ">
-                                  <div className="card-body d-flex justify-content-between">
-                                    <h6 className="card-title ">{ele.title}</h6>
-                                    <p className='text-warning'>${ele.price}</p>
-                                  </div>
-                                  <div>
-                                    <p className='text-secondary text-start'>{ele.style}</p>
-                                  </div>
-                                  <div className='d-flex  justify-content-between'>
-                                    <p>Quantity:{state.cart[ele.id]}</p>
-                                    <div>
-                                      <button className='btn btn-secondary me-1' onClick={() => this.props.addproduct(ele.id)}>+</button>
-                                      <button className='btn btn-secondary' onClick={() => this.props.removeq(ele.id)}>-</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        ))
-                    }
-                  <div>
-                    <div className='d-flex justify-content-between p-3'>
-                      <h4 className='text-secondary'>SUBTOTAL</h4>
-                      <h1 className='text-warning'>${subTotal}</h1>
-                    </div>
-                  </div>
-                </div>
+        const { isopen } = this.state;
+        if (!isopen) {
+          return <ClosedCart open={this.isOpen} cart={this.props.cartItems}/>;
+        }
+        return (
+          <aside className='cart'>
+            <div onClick={this.isclose} className='close-btn'>
+              X
             </div>
-        )
+            <div className='cart-body'>
+              <div className='cart-heading'>
+                <div className='cart-icon'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    className='icon'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'
+                    />
+                  </svg>
+                  <span className='item-count'>{this.props.cartItems.length}</span>
+                </div>
+                <h2>Cart</h2>
+              </div>
+              <CartItem cart={this.props.cartItems} delete={this.props.deleteItems} />
+    
+              <div className='cart-checkout'>
+                <div>
+                  <p>SUBTOTAL</p>
+                  <p>$ 199.00</p>
+                </div>
+                <button>CHECKOUT</button>
+              </div>
+            </div>
+          </aside>
+        );
+      }
     }
-}
+    
+    
+    function ClosedCart(props) {
+      return (
+        <div className='close-cart'>
+          <span onClick={props.open} className='open-btn'>
+            <div className='cart-icon'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                className='icon'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'
+                />
+              </svg>
+              <span className='item-count'>{props.cart.length}</span>
+            </div>
+          </span>
+        </div>
+      );
+    }
 
 export default Cart;
