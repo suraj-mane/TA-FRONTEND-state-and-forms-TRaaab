@@ -3,94 +3,55 @@ import Product from "./Product";
 import data from "./data.json";
 import "./style/main.css"
 import Cart from "./cart";
+import SideBar from "./sidebar";
+
 
 class Main extends React.Component {
     constructor(){
         super()
         this.state = {
-            cart: {},
-            product:"",
-            on: "",
-            cartoc: false,
+            cart:[],
+            size:[],
         }
     }
-    filterProduct = (event) => {
-        this.setState({
-            product: event.target.value
-        })
+    filterProductOnSize = (size) => {
+        if(this.state.size.includes(size)){
+            this.setState((prevState) => ({
+                size: prevState.size.filter((s) => s !== size)
+            }))
+        } else {
+            this.setState((prevState) => ({
+                size: prevState.size.concat(size)
+            }))
+        }
     }
-    filterProductOnSize = (ele) => {
-        this.setState({
-            on:ele
-        })
+    additemsincart = (item) => {
+        this.setState((prevState) => ({
+            cart: prevState.cart.concat(item),
+        }))
     }
-    cartOpenClose = () => {
+    deleteItems = (id) => {
         this.setState((prevState) => {
-            return{
-                cartoc: !prevState.cartoc,
+            let update = prevState.cart.filter((ele) => {
+               return ele.id !== id
+            })
+            return {
+                cart:update,
             }
         })
     }
-    addproduct = (id) => {
-        let {cart} = this.state;
-        if(cart[id]){
-            cart[id] = this.state.cart[id] + 1
-        } else {
-            cart[id] = 1
-        }
-        this.setState({cart});
-    }
-    handelRemoveQuentity = (id) => {
-        let {cart} = this.state
-        if(cart[id] === 1){
-            cart[id] = 1
-        } else {
-            cart[id] = this.state.cart[id] - 1
-        }
-        this.setState({cart})
-    }
     render() {
-        let tag = data.products.map(ele => ele.availableSizes).flat();
-        let all =[...new Set(tag)];
-        var final;
-        if(this.state.product === "low"){
-            final = data.products.sort((a,b) => b.price - a.price)
-        } else if(this.state.product === "high"){
-            final = data.products.sort((a,b) => a.price - b.price)
-        } else if(this.state.on){
-            final = data.products.filter(ele => ele.availableSizes.includes(this.state.on))
-        } else {
-            final = data.products.map(ele => ele)
-        }
         return(
-            <div>
-                <div className="container my-5 ">
-                    <div className="d-flex justify-content-between">
-                        <p>{final.length} Products Found</p>
-                        <div className="d-flex">
-                            <label className="me-3" htmlFor="pricefilter">Oreder by</label>
-                            <select className="form-select" id="pricefilter" onChange={this.filterProduct}>
-                              <option defaultValue>select by</option>
-                              <option value="low">Lowest to Highest</option>
-                              <option value="high">Highest to Lowest</option>
-                            </select>
-                        </div>
+            <div className="container">
+                <div className="row mt-5">
+                    <div className="col-3">
+                        <SideBar product={data} size={this.state.size} filterProductOnSize={this.filterProductOnSize} />
                     </div>
-                    <div className="d-flex justify-content-between mt-4">
-                        <div className="tag">
-                            <ul className="text-center d-flex ps-0 flex-wrap ">
-                                {
-                                    all.map(ele => <button key={ele} className="btn btn-dark tags m-2 p-2 text-light rounded-circle" onClick={this.filterProductOnSize.bind(this,ele)}>{ele}</button>)
-                                }
-                            </ul>
-                        </div>
-                        <Product keys={final} final={final} addproduct={this.addproduct}/>
+                    <div className="col-9">
+                        <Product data={data} size={this.state.size} filterProductOnSize={this.filterProductOnSize} additemsincart={this.additemsincart}/>
                     </div>
                 </div>
-                <button className={this.state.cartoc ? " btn btn-warning cross":"btn btn-warning bag"} onClick={this.cartOpenClose}>{this.state.cartoc ? "X" : <img src={`/static/bag-icon.png`} alt="bag"/>}</button>
-                <div>
-                    <Cart  state={this.state} addproduct={this.addproduct} removeq={this.handelRemoveQuentity}  />
-                </div>
+                <Cart cartItems={this.state.cart} deleteItems={this.deleteItems}/>
             </div>
         )
     }
